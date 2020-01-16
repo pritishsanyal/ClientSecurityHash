@@ -5,7 +5,7 @@
   <mva:VisualBasic.Settings>
     <x:Null />
   </mva:VisualBasic.Settings>
-  <sap:VirtualizedContainerService.HintSize>877.6,848.8</sap:VirtualizedContainerService.HintSize>
+  <sap:VirtualizedContainerService.HintSize>877.6,888.8</sap:VirtualizedContainerService.HintSize>
   <sap2010:WorkflowViewState.IdRef>Main2_1</sap2010:WorkflowViewState.IdRef>
   <TextExpression.NamespacesForImplementation>
     <scg:List x:TypeArguments="x:String" Capacity="27">
@@ -76,7 +76,7 @@
         <x:Boolean x:Key="IsAnnotationDocked">True</x:Boolean>
       </scg:Dictionary>
     </sap:WorkflowViewStateService.ViewState>
-    <State x:Name="__ReferenceID0" sap2010:Annotation.AnnotationText="Get next transaction input data" DisplayName="Get Transaction Data" sap:VirtualizedContainerService.HintSize="1190.4,1596" sap2010:WorkflowViewState.IdRef="State_4">
+    <State x:Name="__ReferenceID0" sap2010:Annotation.AnnotationText="Get next transaction input data" DisplayName="Get Transaction Data" sap:VirtualizedContainerService.HintSize="250.4,98.4" sap2010:WorkflowViewState.IdRef="State_4">
       <State.Entry>
         <Sequence sap2010:Annotation.AnnotationText="Data retrieval mechanism. The TransactionNumber variable holds the current transaction number. Incrementing this number means getting the next transaction. For a robot retry, the number is not increased, in case of application exception, until the max retry number.&#xA;TransactionItem type needs to be changed accordingly." DisplayName="Retrieve Data" sap:VirtualizedContainerService.HintSize="1145.6,1179.2" sap2010:WorkflowViewState.IdRef="Sequence_1">
           <Sequence.Variables>
@@ -224,7 +224,7 @@
           <Transition.To>
             <State x:Name="__ReferenceID2" sap2010:Annotation.AnnotationText="A transaction either succeeds or fails with a Business Rule Exception or a System Error. For System Error, it can be retried." DisplayName="Process Transaction" sap:VirtualizedContainerService.HintSize="230.4,146.4" sap2010:WorkflowViewState.IdRef="State_3">
               <State.Entry>
-                <TryCatch DisplayName="Process Transaction" sap:VirtualizedContainerService.HintSize="436.8,535.2" sap2010:WorkflowViewState.IdRef="TryCatch_1">
+                <TryCatch DisplayName="Process Transaction" sap:VirtualizedContainerService.HintSize="436.8,558.4" sap2010:WorkflowViewState.IdRef="TryCatch_1">
                   <sap:WorkflowViewStateService.ViewState>
                     <scg:Dictionary x:TypeArguments="x:String, x:Object">
                       <x:Boolean x:Key="IsExpanded">True</x:Boolean>
@@ -299,6 +299,27 @@
                         </Assign>
                       </ActivityAction>
                     </Catch>
+                    <Catch x:TypeArguments="s:InvalidOperationException" sap:VirtualizedContainerService.HintSize="403.2,22.4" sap2010:WorkflowViewState.IdRef="Catch`1_8">
+                      <sap:WorkflowViewStateService.ViewState>
+                        <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                          <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+                          <x:Boolean x:Key="IsPinned">False</x:Boolean>
+                        </scg:Dictionary>
+                      </sap:WorkflowViewStateService.ViewState>
+                      <ActivityAction x:TypeArguments="s:InvalidOperationException">
+                        <ActivityAction.Argument>
+                          <DelegateInArgument x:TypeArguments="s:InvalidOperationException" Name="exception" />
+                        </ActivityAction.Argument>
+                        <Assign sap:VirtualizedContainerService.HintSize="262.4,60" sap2010:WorkflowViewState.IdRef="Assign_20">
+                          <Assign.To>
+                            <OutArgument x:TypeArguments="s:InvalidOperationException">[InvalidOperation]</OutArgument>
+                          </Assign.To>
+                          <Assign.Value>
+                            <InArgument x:TypeArguments="s:InvalidOperationException">[exception]</InArgument>
+                          </Assign.Value>
+                        </Assign>
+                      </ActivityAction>
+                    </Catch>
                   </TryCatch.Catches>
                   <TryCatch.Finally>
                     <TryCatch DisplayName="Set the Transaction Status and go to next Transaction" sap:VirtualizedContainerService.HintSize="436.8,319.2" sap2010:WorkflowViewState.IdRef="TryCatch_6">
@@ -357,7 +378,6 @@
                       <x:Boolean x:Key="IsExpanded">True</x:Boolean>
                     </scg:Dictionary>
                   </sap:WorkflowViewStateService.ViewState>
-                  <Transition.Condition>[SystemError IsNot Nothing]</Transition.Condition>
                   <Transition.To>
                     <State x:Name="__ReferenceID3" sap2010:Annotation.AnnotationText="Read Config, Init Applications" DisplayName="Init" sap:VirtualizedContainerService.HintSize="253.6,89.6" sap2010:WorkflowViewState.IdRef="State_2">
                       <State.Entry>
@@ -511,7 +531,7 @@
                             <x:Reference>__ReferenceID0</x:Reference>
                           </Transition.To>
                           <Transition.Action>
-                            <ui:Comment sap:VirtualizedContainerService.HintSize="333.6,75.2" sap2010:WorkflowViewState.IdRef="Comment_1" Text="Default transition is picked up if there are no errors during initialization" />
+                            <ui:Comment sap:VirtualizedContainerService.HintSize="333.6,76" sap2010:WorkflowViewState.IdRef="Comment_1" Text="Default transition is picked up if there are no errors during initialization" />
                           </Transition.Action>
                           <Transition.Condition>[SystemError is Nothing]</Transition.Condition>
                         </Transition>
@@ -592,8 +612,12 @@
                       </State.Transitions>
                     </State>
                   </Transition.To>
+                  <Transition.Action>
+                    <ui:PostponeTransactionItem ContinueOnError="{x:Null}" TimeoutMS="{x:Null}" DeferDate="[Now.AddHours(1)]" DisplayName="Postpone Transaction Item" sap:VirtualizedContainerService.HintSize="200,22.4" sap2010:WorkflowViewState.IdRef="PostponeTransactionItem_1" TransactionItem="[TransactionItem]" />
+                  </Transition.Action>
+                  <Transition.Condition>[SystemError IsNot Nothing]</Transition.Condition>
                 </Transition>
-                <Transition DisplayName="Rule Exception" sap:VirtualizedContainerService.HintSize="448.8,509.6" sap2010:WorkflowViewState.IdRef="Transition_1">
+                <Transition DisplayName="Rule Exception" sap:VirtualizedContainerService.HintSize="484,576.8" sap2010:WorkflowViewState.IdRef="Transition_1">
                   <sap:WorkflowViewStateService.ViewState>
                     <scg:Dictionary x:TypeArguments="x:String, x:Object">
                       <av:PointCollection x:Key="ConnectorLocation">411.72,526.4 411.72,568.04 640,568.04 640,211.02 524.9,211.02</av:PointCollection>
@@ -605,9 +629,27 @@
                   <Transition.To>
                     <x:Reference>__ReferenceID0</x:Reference>
                   </Transition.To>
-                  <Transition.Condition>[BusinessRuleException IsNot Nothing]</Transition.Condition>
+                  <Transition.Action>
+                    <Sequence sap:VirtualizedContainerService.HintSize="241.6,177.6" sap2010:WorkflowViewState.IdRef="Sequence_25">
+                      <sap:WorkflowViewStateService.ViewState>
+                        <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                          <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                        </scg:Dictionary>
+                      </sap:WorkflowViewStateService.ViewState>
+                      <ui:SetTransactionStatus ContinueOnError="{x:Null}" ServiceBaseAddress="{x:Null}" TimeoutMS="{x:Null}" DisplayName="Set Transaction Status" ErrorType="Business" sap:VirtualizedContainerService.HintSize="200,22.4" sap2010:WorkflowViewState.IdRef="SetTransactionStatus_1" Reason="There was an error while performing the processing of this particular item possibly in Regex Stage" Status="Failed" TransactionItem="[TransactionItem]">
+                        <ui:SetTransactionStatus.Analytics>
+                          <scg:Dictionary x:TypeArguments="x:String, InArgument" />
+                        </ui:SetTransactionStatus.Analytics>
+                        <ui:SetTransactionStatus.Output>
+                          <scg:Dictionary x:TypeArguments="x:String, InArgument" />
+                        </ui:SetTransactionStatus.Output>
+                      </ui:SetTransactionStatus>
+                      <ui:SetTransactionProgress TimeoutMS="{x:Null}" DisplayName="Set Transaction Progress" sap:VirtualizedContainerService.HintSize="200,22.4" sap2010:WorkflowViewState.IdRef="SetTransactionProgress_1" Progress="Attempted | Failed" TransactionItem="[TransactionItem]" />
+                    </Sequence>
+                  </Transition.Action>
+                  <Transition.Condition>[BusinessRuleException IsNot Nothing Or InvalidOperation IsNot Nothing]</Transition.Condition>
                 </Transition>
-                <Transition sap2010:Annotation.AnnotationText="No need for any action here, in case of success simply go to next transaction" DisplayName="Success" sap:VirtualizedContainerService.HintSize="429.6,553.6" sap2010:WorkflowViewState.IdRef="Transition_5">
+                <Transition sap2010:Annotation.AnnotationText="No need for any action here, in case of success simply go to next transaction" DisplayName="Success" sap:VirtualizedContainerService.HintSize="448.8,604.8" sap2010:WorkflowViewState.IdRef="Transition_5">
                   <sap:WorkflowViewStateService.ViewState>
                     <scg:Dictionary x:TypeArguments="x:String, x:Object">
                       <av:PointCollection x:Key="ConnectorLocation">457.8,526.4 457.8,550.38 568,550.38 568,250.38 524.9,250.38</av:PointCollection>
@@ -620,6 +662,24 @@
                   <Transition.To>
                     <x:Reference>__ReferenceID0</x:Reference>
                   </Transition.To>
+                  <Transition.Action>
+                    <Sequence sap:VirtualizedContainerService.HintSize="241.6,177.6" sap2010:WorkflowViewState.IdRef="Sequence_26">
+                      <sap:WorkflowViewStateService.ViewState>
+                        <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                          <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                        </scg:Dictionary>
+                      </sap:WorkflowViewStateService.ViewState>
+                      <ui:SetTransactionStatus ContinueOnError="{x:Null}" ServiceBaseAddress="{x:Null}" TimeoutMS="{x:Null}" DisplayName="Set Transaction Status" ErrorType="Business" sap:VirtualizedContainerService.HintSize="200,22.4" sap2010:WorkflowViewState.IdRef="SetTransactionStatus_2" Reason="Item Process Successfully" Status="Successful" TransactionItem="[TransactionItem]">
+                        <ui:SetTransactionStatus.Analytics>
+                          <scg:Dictionary x:TypeArguments="x:String, InArgument" />
+                        </ui:SetTransactionStatus.Analytics>
+                        <ui:SetTransactionStatus.Output>
+                          <scg:Dictionary x:TypeArguments="x:String, InArgument" />
+                        </ui:SetTransactionStatus.Output>
+                      </ui:SetTransactionStatus>
+                      <ui:SetTransactionProgress TimeoutMS="{x:Null}" DisplayName="Set Transaction Progress" sap:VirtualizedContainerService.HintSize="200,22.4" sap2010:WorkflowViewState.IdRef="SetTransactionProgress_2" Progress="Attempted | Sccess" TransactionItem="[TransactionItem]" />
+                    </Sequence>
+                  </Transition.Action>
                   <Transition.Condition>[SystemError Is Nothing And BusinessRuleException is Nothing]</Transition.Condition>
                 </Transition>
               </State.Transitions>
@@ -667,6 +727,7 @@
       <Variable x:TypeArguments="x:String" Name="ItemWIID" />
       <Variable x:TypeArguments="x:String" Name="ItemDescription" />
       <Variable x:TypeArguments="x:String" Name="ItemPage" />
+      <Variable x:TypeArguments="s:InvalidOperationException" Name="InvalidOperation" />
     </StateMachine.Variables>
   </StateMachine>
 </Activity>
